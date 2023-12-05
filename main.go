@@ -10,7 +10,7 @@ import (
 )
 
 func registerPublicRoutes(router *gin.RouterGroup) {
-	router.GET("ping", handlers.PingHandler)
+	router.GET("ping", handlers.GetPing)
 }
 
 func main() {

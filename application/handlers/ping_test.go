@@ -30,7 +30,7 @@ func TestPing(t *testing.T) {
 			w := httptest.NewRecorder()
 			c, _ := gin.CreateTestContext(w)
 			c.Request = r
-			PingHandler(c)
+			GetPing(c)
 			assert.Equal(t, tc.expectCode, w.Code)
 			assert.NotNil(t, w.Body.String())
 		})
