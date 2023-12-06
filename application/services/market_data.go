@@ -10,4 +10,6 @@ type MarketDataClient interface {
 
 	// GetCurrency retrieves information about a specific currency by its symbol.
 	GetCurrency(ctx *gin.Context, symbol string) (*models.Currency, error)
+	// GetAllCurrency retrieves information about all currency symbols.
+	GetAllCurrency(ctx *gin.Context) ([]models.Currency, error)
 }

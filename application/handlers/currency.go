@@ -29,3 +29,15 @@ func (h *CurrencyHandler) GetCurrency(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+
+// Get all currency information.
+func (h *CurrencyHandler) GetAllCurrency(c *gin.Context) {
+	resp, err := h.marketDataClient.GetAllCurrency(c)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, nil)
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
+}

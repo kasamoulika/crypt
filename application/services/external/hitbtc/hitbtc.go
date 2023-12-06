@@ -88,3 +88,49 @@ func (c *HitBtcClient) GetCurrency(ctx *gin.Context, symbol string) (*models.Cur
 
 	return finalResponse, nil
 }
+
+// GetAllCurrency retrieves information about all currency symbols.
+func (c *HitBtcClient) GetAllCurrency(ctx *gin.Context) ([]models.Currency, error) {
+
+	url := fmt.Sprintf("%s/api/3/public/ticker", c.baseUrl)
+	// TODO: change below log level to Debug
+	log.Info(ctx, url)
+	response, err := http.Get(url)
+	if err != nil {
+		log.WithContext(ctx).Error(ctx, "HitBtc GetAllCurrency request failed", err, nil)
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	if response.StatusCode != http.StatusOK {
+		log.WithContext(ctx).Error(ctx, "error: Non-OK status code received ", response.Body)
+		return nil, errors.NewCurrencyError(response.StatusCode, constants.HitBtcError, nil)
+	}
+
+	var result map[string]currencySymbolResult
+	decoder := json.NewDecoder(response.Body)
+	if err := decoder.Decode(&result); err != nil {
+		log.WithContext(ctx).Error(ctx, "error decoding currency response ", response.Body)
+		return nil, errors.NewCurrencyError(response.StatusCode, constants.HitBtcError, nil)
+	}
+
+	var finalResponse []models.Currency
+	for _, key := range config.GetConfig().Symbol.SupportedSymbols {
+		value, ok := result[key]
+		if !ok {
+			continue // Skip if key is not found in the response
+		}
+
+		finalResponse = append(finalResponse, models.Currency{
+			Id:           key,
+			AskPrice:     value.Ask,
+			BidPrice:     value.Bid,
+			HighestPrice: value.High,
+			LowestPrice:  value.Low,
+			OpenPrice:    value.Open,
+			LastPrice:    value.Last,
+		})
+	}
+
+	return finalResponse, nil
+}

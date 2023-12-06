@@ -31,6 +31,7 @@ func registerV1Routes(route *gin.RouterGroup) {
 	hitbtcClient := hitbtc.NewHitBtcClient()
 	currencyHandler := handlers.NewCurrencyHandler(hitbtcClient)
 	route.GET("/currency/:symbol", currencyHandler.GetCurrency)
+	route.GET("/currency/all", currencyHandler.GetAllCurrency)
 }
 
 func main() {

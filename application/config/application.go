@@ -11,3 +11,8 @@ type HitBtcConfig struct {
 	BaseUrl string `toml:"base_url"`
 	Mock    bool   `toml:"mock"`
 }
+
+// Symbol holds application symbol level configs
+type Symbol struct {
+	SupportedSymbols []string `toml:"supportedSymbols"`
+}

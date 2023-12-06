@@ -33,6 +33,7 @@ var (
 type AppConfig struct {
 	Application application  `toml:"application"`
 	HitBtc      HitBtcConfig `toml:"hitbtc"`
+	Symbol      Symbol       `toml:"symbol"`
 }
 
 // LoadConfig will load the configuration available in the conf directory available in basePath
